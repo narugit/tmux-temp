@@ -43,7 +43,7 @@ esac
 
 if "${IS_DARWIN}"; then
   title "Install requirements for macOS"
-  local OSX_CPU_TEMP_TMP="/tmp/osx-cpu-temp"
+  OSX_CPU_TEMP_TMP="/tmp/osx-cpu-temp"
   info "Downloading lavoisel/osx-cpu-temp"
   git clone https://github.com/lavoiesl/osx-cpu-temp ${OSX_CPU_TEMP_TMP}
   info "Compiling and installing lavoisel/osx-cpu-temp"
