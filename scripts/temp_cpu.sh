@@ -40,7 +40,7 @@ print_cpu_temp() {
   if [ "$units" = "F" ]; then
     temp=$(celsius_to_fahrenheit "$temp")
   fi
-  printf "%3.0fº%s" "$temp" "$units"
+  printf "%3.1fº%s" "$temp" "$units"
 }
 
 main() {
