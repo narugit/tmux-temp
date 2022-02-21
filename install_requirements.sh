@@ -41,12 +41,30 @@ case $(uname) in
   ;;
 esac
 
+case $(uname -m) in
+  arm64)
+    IS_ARM=true
+    IS_INTEL=false
+  ;;
+  x86_64)
+    IS_ARM=false
+    IS_INTEL=true
+  ;;
+esac
+
 if "${IS_DARWIN}"; then
   title "Install requirements for macOS"
-  OSX_CPU_TEMP_TMP="/tmp/osx-cpu-temp"
-  info "Downloading lavoisel/osx-cpu-temp"
-  git clone https://github.com/lavoiesl/osx-cpu-temp ${OSX_CPU_TEMP_TMP}
-  info "Compiling and installing lavoisel/osx-cpu-temp"
-  (cd "${OSX_CPU_TEMP_TMP}"; make && sudo make install)
-  rm -rf "${OSX_CPU_TEMP_TMP}"
+  TMPWORKDIR="/tmp/tmux-temp-deps"
+  if "${IS_INTEL}"; then
+    info "Downloading lavoisel/osx-cpu-temp"
+    git clone https://github.com/lavoiesl/osx-cpu-temp ${TMPWORKDIR}
+    info "Compiling and installing lavoisel/osx-cpu-temp"
+    (cd "${TMPWORKDIR}"; make && sudo make install)
+  elif "${IS_ARM}"; then
+    info "Downloading narugit/m1_temperature"
+    git clone https://github.com/narugit/m1_temperature ${TMPWORKDIR}
+    info "Compiling and installing narugit/m1_temperature"
+    (cd "${TMPWORKDIR}"; make && sudo mv ./smctemp /usr/local/bin/)
+  fi
+  rm -rf "${TMPWORKDIR}"
 fi

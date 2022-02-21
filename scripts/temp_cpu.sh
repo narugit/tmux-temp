@@ -33,6 +33,10 @@ print_cpu_temp() {
   elif command_exists "osx-cpu-temp"; then
     local temp
     temp=$(osx-cpu-temp | grep -o "[0-9]*\.[0-9]")
+  elif command_exists "smctemp"; then
+    local temp_average
+    temp_average=$(smctemp -c | awk -F',' '{ sum += $2; n++ } END { if (n > 0) print sum / n; }')
+    local temp="${temp_average}"
   else
     echo "no sensors found"
   fi
@@ -46,6 +50,7 @@ print_cpu_temp() {
 main() {
   local units
   units=$(get_tmux_option "@temp_units" "C")
-  print_cpu_temp "$units"
+  #print_cpu_temp "$units"
+  print_cpu_temp "C"
 }
 main
